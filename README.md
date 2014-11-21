@@ -1,3 +1,5 @@
+# ArmPit scheme utils
+
 A small utility to communicate with an LPC-2214 Olimex board running ArmPit
 scheme. 
 
@@ -20,4 +22,19 @@ project at VUB.
       -r, --erase           Erase files on board
       -e EXECUTE, --execute EXECUTE
                             Execute command on board and print results on stdout
-                            
+
+## Examples
+
+    $ ./armpit.py -e '(define hello "world")'
+    
+    $ ./armpit.py -e 'hello'
+    "world"
+    $ ./armpit.py -l
+    Files on board:
+    - lib
+    $ ./armpit.py -r
+    Files erased from board
+    $ ./armpit.py -l
+    Files on board:
+    $ ./armpit.py -u lib
+    Uploaded lib
