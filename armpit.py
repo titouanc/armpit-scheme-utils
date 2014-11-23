@@ -12,6 +12,7 @@ class Board:
     clean_backspaces = re.compile(r'.\x08')
     clean_spaces = re.compile(r'[\r\n\s\t]+')
     clean_comments = re.compile(r';.*\n')
+    find_defines = re.compile(r'\(\s*(?:define|set\!)\s+\(?\s*([^\s\)]+)')
     ENDL = "\r\n"
 
     def __init__(self, port):
@@ -89,11 +90,34 @@ class Board:
         """
         return self.upload(basename(filename), open(filename).read())
 
-
     def interactive_repl(self):
         """Open an interactive REPL to the board, connected to stdin and stdout"""
+        import readline
+        readline.parse_and_bind('tab: complete')
+        readline.parse_and_bind('set editing-mode vi')
+        print "Interactive mode. Exit with CTRL+D or `exit`."
+        print "Please press the RESET button if the '>' doesn't show up."
+
         self.run_code("")
         self.prompt()
+        completable = set([
+            "define", "let", "set!", "lambda", "exit", "set-input-pin!", 
+            "set-output-pin!", "set-pin!", "is-pin-set?", "fill-rectangle!",
+            "load", "erase"
+        ])
+        class Completer(object):
+            match = []
+            @classmethod
+            def complete(self, text, state):
+                if state == 0:
+                    self.match = filter(lambda x: x.startswith(text), completable)
+                try:
+                    return self.match[state]
+                except IndexError as err:
+                    return None
+        readline.set_completer(Completer.complete)
+        readline.set_completer_delims(" ()")
+
         while True:
             try:
                 scheme = raw_input("> ").strip()
@@ -102,8 +126,11 @@ class Board:
                 if scheme == "exit":
                     break
                 if scheme:
-                    self.run_code(scheme.strip())
+                    self.run_code(scheme)
                     self.check_output()
+                    match = self.find_defines.search(scheme)
+                    if match:
+                        completable.add(match.group(1))
             except KeyboardInterrupt:
                 print
             except EOFError:
@@ -185,9 +212,4 @@ if __name__ == "__main__":
         board.check_output()
 
     if OPTIONS.interactive:
-        import readline
-        readline.parse_and_bind('tab: complete')
-        readline.parse_and_bind('set editing-mode vi')
-        print "Interactive mode. Exit with CTRL+D or `exit`."
-        print "Please press the RESET button if the '>' doesn't show up."
         board.interactive_repl()
