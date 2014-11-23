@@ -9,6 +9,10 @@ project at VUB.
 
 Requires pyserial (`pip install pyserial` or `apt-get install python-serial`)
 
+The interactive REPL provides a per-session command history and autocompletion
+for a few primitives/functions `(define lambda set! set-output-pin! ...)` and
+for user defined objects.
+
 ## Usage
 
     usage: armpit.py [-h] [-p SERIAL_PORT] [-u UPLOAD] [-l] [-r] [-e COMMAND]
