@@ -38,7 +38,7 @@ class Board:
         while c != ">":
             output.write(c)
             c = self.fd.read(1)
-        print
+        print >>output
 
     def run_code(self, code, winsize=64):
         """
@@ -129,6 +129,11 @@ if __name__ == "__main__":
         action='store_true', dest='upload_exec', default=False,
         help="Execute file right after uploading"
     )
+    optparser.add_argument(
+        '-i', '--interactive',
+        action='store_true', dest='interactive', default=False,
+        help="Open an interactive REPL to the board"
+    )
 
     OPTIONS = optparser.parse_args()
     board = Board(OPTIONS.serial_port)
@@ -158,3 +163,26 @@ if __name__ == "__main__":
     if OPTIONS.command:
         board.run_code(OPTIONS.command)
         board.check_output()
+
+    if OPTIONS.interactive:
+        import readline
+        readline.parse_and_bind('tab: complete')
+        readline.parse_and_bind('set editing-mode vi')
+        print "Interactive mode. Exit with CTRL+D or `exit`."
+
+        # Assert REPL is reachable
+        board.run_code("")
+        board.prompt()
+        while True:
+            try:
+                scheme = raw_input("> ").strip()
+                if scheme == "exit":
+                    break
+                if scheme:
+                    board.run_code(scheme.strip())
+                    board.check_output()
+            except KeyboardInterrupt:
+                print
+            except EOFError:
+                break
+        print
