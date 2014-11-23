@@ -90,6 +90,26 @@ class Board:
         return self.upload(basename(filename), open(filename).read())
 
 
+    def interactive_repl(self):
+        """Open an interactive REPL to the board, connected to stdin and stdout"""
+        self.run_code("")
+        self.prompt()
+        while True:
+            try:
+                scheme = raw_input("> ").strip()
+                while scheme.count('(') != scheme.count(')'):
+                    scheme += raw_input("...> ").strip()
+                if scheme == "exit":
+                    break
+                if scheme:
+                    self.run_code(scheme.strip())
+                    self.check_output()
+            except KeyboardInterrupt:
+                print
+            except EOFError:
+                break
+        print
+
 if __name__ == "__main__":
     optparser = argparse.ArgumentParser(
         description="Small utility for Olimex LPC2214 running ARMpit Scheme"
@@ -169,20 +189,5 @@ if __name__ == "__main__":
         readline.parse_and_bind('tab: complete')
         readline.parse_and_bind('set editing-mode vi')
         print "Interactive mode. Exit with CTRL+D or `exit`."
-
-        # Assert REPL is reachable
-        board.run_code("")
-        board.prompt()
-        while True:
-            try:
-                scheme = raw_input("> ").strip()
-                if scheme == "exit":
-                    break
-                if scheme:
-                    board.run_code(scheme.strip())
-                    board.check_output()
-            except KeyboardInterrupt:
-                print
-            except EOFError:
-                break
-        print
+        print "Please press the RESET button if the '>' doesn't show up."
+        board.interactive_repl()
