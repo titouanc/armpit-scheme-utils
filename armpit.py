@@ -115,9 +115,19 @@ if __name__ == "__main__":
         help="Erase files on board"
     )
     optparser.add_argument(
-        '-e', '--execute', type=str,
-        action='store', dest='execute', default=None,
+        '-e', '--execute-command', type=str,
+        action='store', dest='command', default=None,
         help="Execute command on board and print results on stdout"
+    )
+    optparser.add_argument(
+        '-f', '--execute-file', type=str,
+        action='store', dest='file', default=None,
+        help="Execute named file on board and print results on stdout"
+    )
+    optparser.add_argument(
+        '-y', '--upload-exec',
+        action='store_true', dest='upload_exec', default=False,
+        help="Execute file right after uploading"
     )
 
     OPTIONS = optparser.parse_args()
@@ -138,6 +148,13 @@ if __name__ == "__main__":
         for f in board.files():
             print "-", f
 
-    if OPTIONS.execute:
-        board.run_code(OPTIONS.execute)
+    if OPTIONS.upload and OPTIONS.upload_exec:
+        OPTIONS.file = OPTIONS.upload
+
+    if OPTIONS.file:
+        board.run_code('(load "%s")' % (OPTIONS.file))
+        board.check_output()
+
+    if OPTIONS.command:
+        board.run_code(OPTIONS.command)
         board.check_output()
