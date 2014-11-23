@@ -11,8 +11,8 @@ Requires pyserial (`pip install pyserial` or `apt-get install python-serial`)
 
 ## Usage
 
-    $ ./armpit.py -h
-    usage: armpit.py [-h] [-p SERIAL_PORT] [-u UPLOAD] [-l] [-r] [-e EXECUTE]
+    usage: armpit.py [-h] [-p SERIAL_PORT] [-u UPLOAD] [-l] [-r] [-e COMMAND]
+                     [-f FILE] [-y] [-i]
 
     Small utility for Olimex LPC2214 running ARMpit Scheme
 
@@ -24,13 +24,14 @@ Requires pyserial (`pip install pyserial` or `apt-get install python-serial`)
                             Upload this file to the board (will be basenamed)
       -l, --list            List files currently on board
       -r, --erase           Erase files on board
-      -e EXECUTE, --execute EXECUTE
+      -e COMMAND, --execute-command COMMAND
                             Execute command on board and print results on stdout
       -f FILE, --execute-file FILE
-                        Execute named file on board and print results on
-                        stdout
+                            Execute named file on board and print results on
+                            stdout
       -y, --upload-exec     Execute file right after uploading
       -i, --interactive     Open an interactive REPL to the board
+
 
 ## Examples
 
