@@ -112,7 +112,7 @@ class Board:
         try:
             import readline
             readline.parse_and_bind('tab: complete')
-            readline.parse_and_bind('set editing-mode vi')
+            readline.parse_and_bind('set editing-mode emacs')
             readline.set_completer(self.Completer.complete)
             readline.set_completer_delims(" ()")
         except Exception as err:
