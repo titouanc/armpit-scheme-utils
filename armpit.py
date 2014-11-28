@@ -145,13 +145,16 @@ class Board:
         print
 
 if __name__ == "__main__":
+    from os import environ
+    serial_port = environ.get("ARMPIT_PORT", "/dev/ttyUSB0")
+
     optparser = argparse.ArgumentParser(
         description="Small utility for Olimex LPC2214 running ARMpit Scheme"
     )
     optparser.add_argument(
         '-p', '--port', type=str,
-        action='store', dest='serial_port', default="/dev/ttyUSB0",
-        help="Serial port to use (/dev/ttyUSB0)"
+        action='store', dest='serial_port', default=serial_port,
+        help="Serial port to use (" + serial_port + "). This settings defaults to the environement variable ARMPIT_PORT."
     )
     optparser.add_argument(
         '-u', '--upload', type=str,
