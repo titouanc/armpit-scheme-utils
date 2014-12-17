@@ -37,7 +37,7 @@ class Board:
         """
         c = self.fd.read(1)
         while c != ">":
-            output.write(c)
+            output.write(c if c != "\r" else "\n")
             c = self.fd.read(1)
         print >>output
 
