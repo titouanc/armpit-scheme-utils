@@ -36,8 +36,16 @@ class Board:
         but print interpreter output in given file
         """
         c = self.fd.read(1)
-        while c != ">":
-            output.write(c if c != "\r" else "\n")
+        hold = 1
+        last = None
+        while hold > 0:
+            if c == '>':
+                hold -= 1
+            elif last == '#' and c == '<':
+                hold += 1
+            if hold > 0:
+                output.write(c if c != "\r" else "\n")
+            last = c
             c = self.fd.read(1)
         print >>output
 
