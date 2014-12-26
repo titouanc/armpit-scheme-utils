@@ -104,7 +104,9 @@ class Board:
         completable = set([
             "define", "let", "set!", "lambda", "exit", "set-input-pin!", 
             "set-output-pin!", "set-pin!", "is-pin-set?", "fill-rectangle!",
-            "load", "erase", "pulse_in"
+            "load", "erase", "pulse_in", "stop-timer", "start-timer",
+            "restart-timer", "reset-timer", "write-timer-period", "timer0",
+            "timer1", "read-timer"
         ])
         @classmethod
         def complete(self, text, state):
