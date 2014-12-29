@@ -15,6 +15,9 @@ class Board:
     find_defines = re.compile(r'\(\s*(?:define|set\!)\s+\(?\s*([^\s\)]+)')
     ENDL = "\r\n"
 
+    class SchemeSyntaxError(Exception):
+        pass
+
     def __init__(self, port):
         self.fd = Serial(port, 9600)
 
@@ -96,6 +99,12 @@ class Board:
         @param filename (str) The location of the file to upload on the filesystem
         @note The file name will be the basename of the file on the filsesytem
         """
+        contents = open(filename).read()
+        o, c = contents.count('('), contents.count(')')
+        if o > c:
+            raise self.SchemeSyntaxError("Missing ')'")
+        elif c > o:
+            raise self.SchemeSyntaxError("Too much ')'")
         return self.upload(basename(filename), open(filename).read())
 
     class Completer(object):
