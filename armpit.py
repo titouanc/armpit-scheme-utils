@@ -99,7 +99,7 @@ class Board:
         @param filename (str) The location of the file to upload on the filesystem
         @note The file name will be the basename of the file on the filsesytem
         """
-        contents = open(filename).read()
+        contents = self.clean_comments.sub('', open(filename).read())
         o, c = contents.count('('), contents.count(')')
         if o > c:
             raise self.SchemeSyntaxError("Missing ')'")
