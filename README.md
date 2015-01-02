@@ -39,31 +39,40 @@ for user defined objects.
 
 ## Examples
 
-    # List files
-    $ ./armpit.py -l
+### List files
+
+    $ armpit.py -l
     Files on board:
     - lib
 
-    # Execute a scheme snippet on board
-    $ ./armpit.py -e '(display "Hello world")'
-    Hello world
+### Remove files
 
-    # Upload a file ...
-    $ ./armpit.py -u screen.scm 
-    Uploaded screen.scm
-
-    # ... then load it
-    $ ./armpit.py -f screen.scm 
-
-    # Upload and load a file
-    $ ./armpit.py -yu blink.scm 
-    Uploaded blink.scm
-
-    # Remove files
     $ ./armpit.py -r
     Files erased from board
 
-    # Interactive REPL
+### Execute a scheme snippet on board
+
+    $ armpit.py -e '(display "Hello world")'
+    Hello world
+
+### Upload a file ...
+
+    $ armpit.py -u screen.scm 
+    Uploaded screen.scm
+
+### ... then load it
+
+    $ ./armpit.py -f screen.scm
+    Hello from screen.scm
+
+### Upload and directly load a file
+
+    $ ./armpit.py -yu blink.scm 
+    Uploaded blink.scm
+    Hello from blink.scm
+
+### Interactive REPL
+
     $ ./armpit.py -i
     Interactive mode. Exit with CTRL+D or `exit`.
     > (define (range min max) (if (< min max) (cons min (range (+ 1 min) max)) '()))

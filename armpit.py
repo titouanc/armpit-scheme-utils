@@ -220,9 +220,13 @@ if __name__ == "__main__":
         print "Files erased from board"
 
     if OPTIONS.upload:
-        board.upload_file(OPTIONS.upload)
-        board.prompt()
-        print "Uploaded", OPTIONS.upload
+        try:
+            board.upload_file(OPTIONS.upload)
+            board.prompt()
+            print "Uploaded", OPTIONS.upload
+        except board.SchemeSyntaxError as err:
+            print "\033[31;1mError in %s: %s\033[0m" % (OPTIONS.upload, str(err))
+            exit(1)
 
     if OPTIONS.list:
         print "Files on board:"
